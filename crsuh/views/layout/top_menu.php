@@ -25,8 +25,8 @@
     </ul>
 
     <div class="d-block d-lg-none">
-      <img src="<?=base_url()?>assets/uploads/<?=$app_logo?>" class="dark-logo" height="40" alt="" />
-      <img src="<?=base_url()?>assets/uploads/<?=$app_logo_white?>" class="light-logo"  height="40" alt="" />
+      <img src="<?=base_url()?>assets/uploads/app_logo.png" class="dark-logo" height="40" alt="" />
+      <img src="<?=base_url()?>assets/uploads/app_logo_white.png" class="light-logo"  height="40" alt="" />
     </div>
     <button class="navbar-toggler p-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="p-2">
@@ -93,8 +93,8 @@
                 <div class="d-flex align-items-center py-9 mx-7 border-bottom">
                   <img src="<?=base_url()?>assets/images/profile/user-1.jpg" class="rounded-circle" width="80" height="80" alt="" />
                   <div class="ms-3">
-                    <h5 class="mb-1 fs-3"><?=ucfirst($this->session->userdata("username"));?></h5>
-                    <span class="mb-1 d-block text-dark"><?=$this->session->userdata("usertype");?></span>
+                    <h5 class="mb-1 fs-3"><?=ucfirst($this->session->login->md_name);?></h5>
+                    <span class="mb-1 d-block text-dark"><?=$this->session->login->md_code?></span>
 
                   </div>
                 </div>
@@ -113,7 +113,7 @@
                       </div>
                     </div>
                   </div> -->
-                  <a href="<?=base_url('login/logout')?>" class="btn btn-outline-primary">Log Out</a>
+                  <a href="<?=base_url('md_login/logout')?>" class="btn btn-outline-primary">Log Out</a>
                 </div>
               </div>
             </div>
