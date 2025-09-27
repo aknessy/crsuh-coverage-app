@@ -30,27 +30,32 @@
                         <h5 class="card-title fw-semibold">Track Key Performance Indexes</h5>
                         <p class="card-subtitle mb-0">Keep a record of KPIs associated with <?=ucwords($this->session->login->md_name)?></p>
                     </div>
-                    <div class="">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addKpiModal">Add KPI</button>
-                    </div>
                 </div>
                 <div class="card-body py-3">
                     <div>
                         <form id="trackRecordForm" action="" method="post">
                             <div class="form-step row mb-3">
-                                <div class="col-sm-12">
-                                    <label for="index" class="form-label fw-semibold mb-0">Key Performance Index(es)</label>
-                                    <select id="index" class="form-select" name="kpi">
-                                        <option value="">Select KPI</option>
-                                        <?php 
-                                            if($md_kpi_list){
-                                                foreach($md_kpi_list as $kpi){
-                                                    echo "<option value='" . $kpi->kpi_uuid . "' data-kpi='" . $kpi->kpi_name . "'>" . strtoupper($kpi->kpi_name) . "</option>";
-                                                }
-                                            }
-                                        ?>
-                                    </select>
-                                </div>
+                                <?php
+                                    if($md_kpi_list): ?>
+                                        <div class="col-sm-12">
+                                            <label for="index" class="form-label fw-semibold mb-0">Key Performance Index(es)</label>
+                                            <select id="index" class="form-select" name="kpi">
+                                                <option value="">Select KPI</option>
+                                                <?php 
+                                                    foreach($md_kpi_list as $kpi){
+                                                        echo "<option value='" . $kpi->kpi_uuid . "' data-kpi='" . $kpi->kpi_name . "'>" . strtoupper($kpi->kpi_name) . "</option>";
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="alert alert-warning" role="alert">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <span class="fs-4"><small>It appears this Ministry/Department does not have any <strong><em>Key Performance Indexe(s)</em></strong> associated with it. Click the "Add KPI" button to create KPIs.</small></span>
+                                                <button class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addKpiModal">Add KPI</button>
+                                            </div>
+                                        </div>
+                                <?php endif;?>
                             </div>
                             
                             <div id="loadIndexForm" class= "form-step row mb-3"></div>
@@ -93,29 +98,57 @@
     <div class="modal fade" id="addKpiModal" tabindex="-1" aria-labelledby="addKpiModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addKpiModalLabel">Add KPI</h5>
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white text-uppercase" id="addKpiModalLabel">Add Key Performance Index(es)</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="kpiForm" action="<?=base_url('md/create_kpi')?>" method="post">
                         <div class="mb-3">
-                            <label for="kpiName" class="form-label">KPI Name</label>
-                            <input type="text" class="form-control" id="kpiName" placeholder="Enter KPI Name">
+                            <h5 class="mb-1">Key Performance Indexes</h5>
+                            <p class="mb-0"><small>Choose KPIs that are associated with the current Ministry/Department</p>
                         </div>
-                        <div class="mb-3">
-                            <label for="kpiDescription" class="form-label">KPI Description</label>
-                            <textarea class="form-control" id="kpiDescription" rows="3"></textarea>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="Enrollment" id="enrollment" name="kpi[]">
+                            <label class="form-check-label fs-4" for="enrollment">Enrollment</label>
                         </div>
-                        <div class="mb-3">
-                            <label for="kpiValue" class="form-label">KPI Value</label>
-                            <input type="number" class="form-control" id="kpiValue" placeholder="Enter KPI Value">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="Empanelment" id="empanelment" name="kpi[]">
+                            <label class="form-check-label fs-4" for="empanelment">Empanelment</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="Accreditation" id="accreditation" name="kpi[]">
+                            <label class="form-check-label fs-4" for="accreditation">Accreditation</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="Capitation Payment" id="capitation_payment" name="kpi[]">
+                            <label class="form-check-label fs-4" for="capitation_payment">Capitation Payment</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="Fee for Service" id="fee_for_service" name="kpi[]">
+                            <label class="form-check-label fs-4" for="fee_for_service">Fee For Service</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="Interventions" id="interventions" name="kpi[]">
+                            <label class="form-check-label fs-4" for="interventions">Interventions</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="Quality Assurance" id="qual_ass" name="kpi[]">
+                            <label class="form-check-label fs-4" for="qual_ass">Quality Assurance</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="SOC Meetings" id="soc_meetings" name="kpi[]">
+                            <label class="form-check-label fs-4" for="soc_meetings">SOC Meetings</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="Trainings" id="trainings" name="kpi[]">
+                            <label class="form-check-label fs-4" for="trainings">Trainings</label>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button id="saveKPIsBtn" data-target="#kpiForm" type="button" class="btn btn-primary">Save Selections</button>
                 </div>
             </div>
         </div>
@@ -154,7 +187,7 @@
                             $('#loadIndexForm').find('.picker-with-time').flatpickr(flatpickrWithTimeOption);
                             $('#loadIndexForm').find('.date-widget').flatpickr(options);
                             
-                            if (document.querySelector('#desc') && document.querySelector('#desc').value) {
+                            //if (document.querySelector('#desc') && document.querySelector('#desc').value) {
                                 ClassicEditor.create(document.querySelector('#desc'), {
                                     toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'undo', 'redo'],
                                     placeholder: 'Enter book description here...'
@@ -162,7 +195,7 @@
                                 .catch(error => {
                                     console.error(error);
                                 });
-                            }
+                            //}
 
                             $('#activityRunner').addClass('d-none')
                         }
@@ -193,6 +226,11 @@
 
         $('#submit').on('click', function(){
             alert('Form submission initiated!');
+        });
+
+        $('#saveKPIsBtn').click(function(){
+            var formToSubmit = $(this).data('target')
+            $(formToSubmit).submit();
         })
     });
 </script>

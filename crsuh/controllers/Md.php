@@ -32,6 +32,51 @@ class Md extends CI_Controller{
         $this->load->view('_layout_main_', $this->data);
     }
 
+    public function create_kpi(){
+        if($_POST){
+            $this->form_validation->set_rules('kpi[]', 'Key Performance Index', 'required');
+
+            if($this->form_validation->run() == FALSE){
+                $this->session->set_flashdata('error', 'Please select a Key Performance Index!');
+                redirect(base_url('md/track_record'));
+            }else{
+                $kpi_md_code = $this->session->login->md_code;
+                $selected_kpi = $this->input->post('kpi');
+                $successes = 0;
+
+                foreach($selected_kpi as $kpi){
+                    $check_kpi_exists = $this->md_m->check_md_kpi($kpi_md_code, $kpi);
+                    
+                    if($check_kpi_exists){
+                        continue;
+                    }
+        
+                    $data = [
+                        'kpi_uuid' => generate_uuid(),
+                        'kpi_md_code' => $kpi_md_code,
+                        'kpi_name' => $kpi,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];
+        
+                    $insert = $this->md_login_m->populate_kpi_table($data);
+
+                    if($insert)$successes++;
+                }
+
+                if($successes > 0){
+                    $this->session->set_flashdata('success', 'Key Performance Indexes have been created for this Ministry/Department');
+                }else{
+                    $this->session->set_flashdata('error', 'Failed to create KPIs. Please try again!');
+                }
+
+                redirect(base_url('md/track_record'));
+            }
+        }else{
+            $this->session->set_flashdata('error', 'Request rejected!');
+            redirect(base_url('md/track_record'));
+        }
+    }
+
     public function load_kpi_form(){
         $perf_index = $this->input->post('kpi');
         $form = '';
