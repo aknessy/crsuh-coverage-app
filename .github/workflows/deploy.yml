@@ -1,0 +1,43 @@
+name: onemoni -- production
+
+on:
+    push:
+        branches: [development]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Executing remote command one
+              uses: appleboy/ssh-action@master
+              with:
+                  HOST: ${{ secrets.SSH_HOST }}
+                  USERNAME: ${{ secrets.SSH_USER }}
+                  KEY: ${{ secrets.SSH_KEY }}
+                  script: "cd ${{ secrets.APP_PATH }} && rm -rf ./*"
+
+            - name: Copy file via scp
+              uses: appleboy/scp-action@master
+              with:
+                  HOST: ${{ secrets.SSH_HOST }}
+                  USERNAME: ${{ secrets.SSH_USER }}
+                  KEY: ${{ secrets.SSH_KEY }}
+                  source: "./"
+                  target: ${{ secrets.APP_PATH }}
+
+            - name: Executing remote  command
+              uses: appleboy/ssh-action@master
+              with:
+                  HOST: ${{ secrets.SSH_HOST }}
+                  USERNAME: ${{ secrets.SSH_USER }}
+                  KEY: ${{ secrets.SSH_KEY }}
+                  script: |
+                      cd '${{ secrets.APP_PATH }}' && \
+                      # upload new ENV
+                      echo "${{secrets.ENV_DEVELOPMENT}}" > .env.development && \
+                      echo "${{secrets.ENV_PRODUCTION}}" > .env.production && \
+                      echo "${{secrets.ENV_TESTING}}" > .env.testing && \
+                      rm -rf .git && rm -rf .github && export CI_ENV=testing
