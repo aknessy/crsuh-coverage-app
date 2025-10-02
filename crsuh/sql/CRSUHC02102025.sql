@@ -79,6 +79,37 @@ INSERT INTO `crsuh_mds` VALUES (1,'3e10cd97-957c-489c-af87-1d8a70e78448','CRSHIA
 UNLOCK TABLES;
 
 --
+-- Table structure for table `crsuh_patient_info`
+--
+
+DROP TABLE IF EXISTS `crsuh_patient_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `crsuh_patient_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `track_record_uuid` char(36) NOT NULL,
+  `patient_pid` varchar(45) NOT NULL,
+  `patient_firstname` varchar(45) NOT NULL,
+  `patient_lastname` varchar(45) NOT NULL,
+  `patient_phone` varchar(45) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `deleted` tinyint(4) DEFAULT 0,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crsuh_patient_info`
+--
+
+LOCK TABLES `crsuh_patient_info` WRITE;
+/*!40000 ALTER TABLE `crsuh_patient_info` DISABLE KEYS */;
+INSERT INTO `crsuh_patient_info` VALUES (1,'6312e9d1-5cbe-482b-8cad-ecfb72a640b2','OPD12345','Jonas','Gutierez','7039284608','2025-10-02 08:08:31',0,NULL),(2,'6312e9d1-5cbe-482b-8cad-ecfb72a640b2','OPD1242531','Mandu','Chinonso','09031446670','2025-10-02 08:08:31',0,NULL),(4,'8051732d-e4a5-4878-93a9-2fbe66e3d3d4','OPD34255','Joshua','Umoren','09021340551','2025-10-02 10:16:00',0,NULL),(5,'8051732d-e4a5-4878-93a9-2fbe66e3d3d4','OPD15524','Monica','Thor','07032142111','2025-10-02 10:16:00',0,NULL),(6,'8051732d-e4a5-4878-93a9-2fbe66e3d3d4','OPD12345','Jonas','Irabor','07039284608','2025-10-02 10:16:00',0,NULL);
+/*!40000 ALTER TABLE `crsuh_patient_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `crsuh_track_record`
 --
 
@@ -88,12 +119,25 @@ DROP TABLE IF EXISTS `crsuh_track_record`;
 CREATE TABLE `crsuh_track_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL,
+  `md_uuid` varchar(36) NOT NULL,
   `kpi_uuid` varchar(45) NOT NULL,
-  `num_of_records` varchar(45) NOT NULL,
-  `patient_uuid` varchar(45) DEFAULT NULL,
+  `accreditation_type` varchar(100) DEFAULT NULL,
+  `accreditation_level` varchar(45) DEFAULT NULL,
+  `sector` varchar(45) DEFAULT NULL,
+  `sub_sector` varchar(45) DEFAULT NULL,
+  `employer_level` varchar(45) DEFAULT NULL,
+  `provider` varchar(45) DEFAULT NULL,
+  `quality_assurance_lga` int(11) DEFAULT 0,
+  `soc_meeting_held` enum('yes','no') DEFAULT NULL,
+  `meeting_date` datetime DEFAULT NULL,
+  `key_notes` text DEFAULT NULL,
+  `training_done` enum('yes','no') DEFAULT NULL,
+  `training_date` datetime DEFAULT NULL,
+  `training_theme` text DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
+  `deleted` tinyint(4) DEFAULT 0,
   PRIMARY KEY (`id`,`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,6 +146,7 @@ CREATE TABLE `crsuh_track_record` (
 
 LOCK TABLES `crsuh_track_record` WRITE;
 /*!40000 ALTER TABLE `crsuh_track_record` DISABLE KEYS */;
+INSERT INTO `crsuh_track_record` VALUES (1,'6312e9d1-5cbe-482b-8cad-ecfb72a640b2','3e10cd97-957c-489c-af87-1d8a70e78448','cd72af27-81fd-40eb-bb39-e5532027692e',NULL,NULL,'Formal','BHCPF','State Government',NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,'2025-10-02 08:08:31',0),(2,'8051732d-e4a5-4878-93a9-2fbe66e3d3d4','3e10cd97-957c-489c-af87-1d8a70e78448','cd72af27-81fd-40eb-bb39-e5532027692e',NULL,NULL,'Formal','BHCPF','Local Government',NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,'2025-10-02 10:16:00',0);
 /*!40000 ALTER TABLE `crsuh_track_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,6 +237,43 @@ LOCK TABLES `state` WRITE;
 INSERT INTO `state` VALUES (1,NULL,0,'AB','Abia'),(2,NULL,0,'AD','Adamawa'),(3,NULL,0,'AK','Akwa Ibom'),(4,NULL,0,'AN','Anambra'),(5,NULL,0,'BA','Bauchi'),(6,NULL,0,'BY','Bayelsa'),(7,NULL,0,'BN','Benue'),(8,NULL,0,'BO','Borno'),(9,NULL,0,'CR','Cross River'),(10,NULL,0,'DT','Delta'),(11,NULL,0,'EB','Ebonyi'),(12,NULL,0,'ED','Edo'),(13,NULL,0,'EK','Ekiti'),(14,NULL,0,'GO','Gombe'),(15,NULL,0,'IM','Imo'),(16,NULL,0,'JG','Jigawa'),(17,NULL,0,'KD','Kaduna'),(18,NULL,0,'KN','Kano'),(19,NULL,0,'KT','Katsina'),(20,NULL,0,'KB','Kebbi'),(21,NULL,0,'KG','Kogi'),(22,NULL,0,'KW','Kwara'),(23,NULL,0,'LA','Lagos'),(24,NULL,0,'NA','Nasarawa'),(25,NULL,0,'NG','Niger'),(26,NULL,0,'OG','Ogun'),(27,NULL,0,'OD','Ondo'),(28,NULL,0,'OS','Osun'),(29,NULL,0,'OY','Oyo'),(30,NULL,0,'PL','Plateau'),(31,NULL,0,'RV','Rivers'),(32,NULL,0,'SO','Sokoto'),(33,NULL,0,'TA','Taraba'),(34,NULL,0,'YO','Yobe'),(35,NULL,0,'ZA','Zamfara'),(36,NULL,0,'EN','Enugu'),(37,NULL,0,'ABJ','Abuja');
 /*!40000 ALTER TABLE `state` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_uuid` char(36) NOT NULL DEFAULT uuid(),
+  `firstname` varchar(255) NOT NULL,
+  `lastname` varchar(255) NOT NULL,
+  `phone` varchar(15) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `username` varchar(60) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `profile_image` varchar(255) DEFAULT NULL,
+  `address` text DEFAULT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  `role` varchar(50) NOT NULL DEFAULT 'user',
+  `is_verified` tinyint(1) DEFAULT 0,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`user_uuid`),
+  UNIQUE KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -202,4 +284,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-09-27  4:38:08
+-- Dump completed on 2025-10-02 10:19:07

@@ -32,14 +32,15 @@
                     </div>
                 </div>
                 <div class="card-body py-3">
+                    <?php echo validation_errors(); ?>
                     <div>
-                        <form id="trackRecordForm" action="" method="post">
+                        <?=form_open_multipart(base_url('md/record_kpi'), ['id' => 'trackRecordForm', 'class' => 'w-100'])?>
                             <div class="form-step row mb-3">
                                 <?php
                                     if($md_kpi_list): ?>
                                         <div class="col-sm-12">
                                             <label for="index" class="form-label fw-semibold mb-0">Key Performance Index(es)</label>
-                                            <select id="index" class="form-select" name="kpi">
+                                            <select id="index" class="form-select" name="kpi" required>
                                                 <option value="">Select KPI</option>
                                                 <?php 
                                                     foreach($md_kpi_list as $kpi){
@@ -61,35 +62,59 @@
                             <div id="loadIndexForm" class= "form-step row mb-3"></div>
                             
                             <div class="form-step row d-none">
-                                <div class="col-sm-12">
-                                    <div class="mb-4 py-4 px-3 bg-light rounded">
-                                        <h5 class="fw-semibold text-uppercase mb-3">Patient Information</h5>
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <label for="patient_fname" class="form-label fw-semibold mb-0">First Name</label>
-                                                <input type="text" name="fname" class="form-control" required>
+                                <div class="col-sm-12 mb-3">
+                                    <div class="py-4 px-3 bg-light rounded">
+                                        <div class="w-100 mb-3">
+                                            <h5 class="fw-semibold text-uppercase mb-3 border-bottom pb-1">Patient Information</h5>
+                                            <div class="row">
+                                                <div class="col-sm-12 mb-3">
+                                                    <label class="form-label fw-semibold mb-0">Patient's ID (PID)</label>
+                                                    <input type="text" name="patient_pid[]" class="form-control" placeholder="Patient's ID" value="" />
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label class="form-label fw-semibold mb-0">First Name</label>
+                                                    <input type="text" name="patient_fname[]" class="form-control" placeholder="Firstname">
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label class="form-label fw-semibold mb-0">Last Name</label>
+                                                    <input type="text" name="patient_lname[]" class="form-control" placeholder="Lastname">
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label class="form-label fw-semibold mb-0">Phone</label>
+                                                    <input type="text" name="patient_phone[]" class="form-control" placeholder="Phone">
+                                                </div>
                                             </div>
-                                            <div class="col-sm-4">
-                                                <label for="patient_lname" class="form-label fw-semibold mb-0">Last Name</label>
-                                                <input type="text" name="lname" class="form-control" required>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <label for="patient_phone" class="form-label fw-semibold mb-0">Contact</label>
-                                                <input type="text" name="phone" class="form-control" required>
+                                        </div>
+                                        <div id="newPatientContainer" class="w-100"></div>
+                                    </div>
+                                    <div class="row mb-3 mt-3">
+                                        <div class="col-sm-12">
+                                            <h4 class="fs-4 text-info">Or Download the attached template, Fill it and click the input field below to attach same</h4>
+                                            <div class="mb-2">
+                                                <label class="form-label fw-semibold mb-0">Click to select completed excel file</label>
+                                                <input type="file" name="attached_file" value="" accepts=".xls,.xlsx" class="form-control form-control-lg" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row mt-2">
                                         <div class="col-sm-12">
-                                            <div class="d-flex align-items-center justify-content-end">
-                                                <button id="backBtn" type="button" class="btn btn-lg btn-outline-primary me-2">Back</button>
-                                                <button id="submit" type="submit" class="btn btn-lg btn-primary">Submit</button>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div id="addPatientButtonContainer" class="d-none">
+                                                    <div class="d-flex align-items-center justify-content-around">
+                                                        <button id="addNewPatient" type="button" class="btn me-2 btn-lg btn-secondary">Add Patient</button>
+                                                        <a href="<?=base_url('md/download_template')?>" class="btn btn-lg btn-outline-dark">Download Template</a>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <button id="backBtn" type="button" class="btn btn-lg btn-outline-primary me-2">Back</button>
+                                                    <button id="submit" type="submit" class="btn btn-lg btn-primary">Submit</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        <?=form_close()?>
                     </div>
                 </div>
             </div>
@@ -214,6 +239,7 @@
 
             currentForm.addClass('d-none');
             nextForm.removeClass('d-none');
+            $('#addPatientButtonContainer').removeClass('d-none');
         });
 
         $('#backBtn').on('click', function(){
@@ -222,15 +248,98 @@
 
             currentForm.addClass('d-none');
             previousForm.removeClass('d-none');
-        });
-
-        $('#submit').on('click', function(){
-            alert('Form submission initiated!');
+            $('#addPatientButtonContainer').addClass('d-none');
         });
 
         $('#saveKPIsBtn').click(function(){
             var formToSubmit = $(this).data('target')
             $(formToSubmit).submit();
-        })
+        });
+
+        const newPatientBlockContainer = document.getElementById('newPatientContainer');
+        let childElementCount = newPatientBlockContainer.childElementCount;
+
+        $('#addNewPatient').click(function(){
+            if(childElementCount == 0)
+                childElementCount = 2;
+
+            const newPatientBlock = createNewPatient(childElementCount);
+            newPatientBlockContainer.appendChild(newPatientBlock);
+            
+            childElementCount++;
+        });
+
+        $('#trackRecordForm').on('click', '.removeNewPatientBtn', function(){
+            const newPatientBlockContainer = document.getElementById('newPatientContainer');
+            removeLastElement(newPatientBlockContainer.id);
+        });
+
+        $('#trackRecordForm').on('submit', function(e) {
+            let isValid = true;
+
+            // Check all required inputs inside the form
+            $('#trackRecordForm [required]').each(function() {
+                if ($(this).is(':visible') && !$(this).val()) {
+                    isValid = false;
+                    $(this).addClass('input-error'); // Optional: highlight error
+                } else {
+                    $(this).removeClass('input-error');
+                }
+            });
+
+            // If invalid, prevent submission
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please fill all required fields.');
+            }
+        });
+
     });
+</script>
+
+<script>
+    function createNewPatient(trackChildCount) {
+        const wrapper = document.createElement('div');
+        
+        const timestamp = Date.now();
+        let newElementID = `new-patient-block-${timestamp}`;
+
+        wrapper.id = newElementID;
+
+        wrapper.innerHTML = `
+                    <div class="w-100 mb-3">
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <label for="patient-${trackChildCount}" class="form-label fw-semibold mb-0">Patetient's ID (PID) ${trackChildCount}</label>
+                                <input id="patient-${trackChildCount} type="text" name="patient_pid[]" class="form-control" placeholder="Patient's ID ${trackChildCount}" value="" />
+                            </div>
+                            <div class="col-sm-2 d-flex align-items-end justify-content-center">
+                                <button type="button" class="removeNewPatientBtn btn btn-danger">Remove</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label for="patient-fname-${trackChildCount}" class="form-label fw-semibold mb-0">First Name ${trackChildCount}</label>
+                                <input id="patient-fname-${trackChildCount}" type="text" name="patient_fname[]" class="form-control" placeholder="Firstname ${trackChildCount}">
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="patient-lname-${trackChildCount}" class="form-label fw-semibold mb-0">Last Name ${trackChildCount}</label>
+                                <input type="text" name="patient_lname[]" class="form-control" placeholder="Lastname ${trackChildCount}">
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="patient-phone-${trackChildCount}" class="form-label fw-semibold mb-0">Phone ${trackChildCount}</label>
+                                <input id="patient-phone-${trackChildCount}" type="text" name="patient_phone[]" class="form-control" placeholder="Phone ${trackChildCount}">
+                            </div>
+                        </div>
+                    </div>
+                `;
+        
+        return wrapper;
+    }
+
+    function removeLastElement(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container || !container.lastElementChild) return;
+        container.removeChild(container.lastElementChild);
+    }
 </script>

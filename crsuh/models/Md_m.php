@@ -40,4 +40,14 @@ class Md_m extends CI_Model
         return $this->db->get_where('lga', ['state_id' => $md_state])->result();
     }
 
+    public function insert($data){
+        $this->db->insert('crsuh_track_record', $data);
+        return $this->db->insert_id() > 0;
+    }
+
+    public function create_patient_record($patient_records){
+        $this->db->insert('crsuh_patient_info', $patient_records);
+        return $this->db->last_query();
+    }
+
 }

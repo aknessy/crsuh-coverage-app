@@ -1,7 +1,7 @@
 <div class="col-sm-12">
     <div class="mb-3">
         <label class="form-label fw-semibold mb-0">Providers</label>
-        <select id="sector" class="form-select" name="sector">
+        <select id="sector" class="form-select" name="provider">
             <option value="">Select Provider</option>
             <option value="Primary" data-provider="#primary">Primary Providers</option>
             <option value="Secondary">Secondary Providers</option>
@@ -10,7 +10,7 @@
     </div>
     <div id="primary" class="mb-4 d-none">
         <label for="lgas" class="form-label fw-semibold mb-0">LGA</label>
-        <select id="lga" class="form-select" name="qual_ash_lga" required>
+        <select id="lga" class="form-select" name="qual_ash_lga">
             <option value="">Select LGA</option>
             <?php
                 if($lgas){

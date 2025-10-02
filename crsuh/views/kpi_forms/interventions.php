@@ -1,7 +1,7 @@
 <div class="col-sm-12">
     <div class="mb-3">
         <label class="form-label fw-semibold mb-0">Providers</label>
-        <select id="sector" class="form-select" name="sector">
+        <select id="sector" class="form-select" name="provider">
             <option value="">Select Provider</option>
             <option value="Primary">Primary Providers</option>
             <option value="Secondary">Secondary Providers</option>

@@ -16,7 +16,7 @@
     </div>
     <div class="mb-3">
         <label for="training_theme" class="form-label fw-semibold mb-0">Theme for training</label>
-        <textarea id="desc" class="form-control " name="training_theme" required></textarea>
+        <textarea id="desc" class="form-control " name="training_theme"></textarea>
     </div>
     <div class="d-flex align-items-center justify-content-end">
         <button id="continueBtn" type="button" class="btn btn-lg btn-outline-primary">Continue</button>

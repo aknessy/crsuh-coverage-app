@@ -22,14 +22,14 @@
                   </div> -->
                   <?php } ?>
                   <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label fw-semibold mb-0">MD Code</label>
-                    <input type="text" name="md_code" class="form-control" autocomplete="off" required>
+                    <label for="exampleInputEmail1" class="fw-semibold mb-0">Account Identifier</label>
+                    <input type="text" name="handle" class="form-label fs-3 form-control" placeholder="MD Code or MD Name or Username or Email" required>
                   </div>
                   <div class="mb-4">
-                    <label for="exampleInputPassword1" class="form-label fw-semibold mb-0">MD Password</label>
-                    <div class="input-group">
-                      <input type="password" name="md_pwd" class="form-control"  autocomplete="off" required id="exampleInputPassword1">
-                      <button type="button" class="btn btn-outline-primary" id="togglePassword">
+                    <label for="exampleInputPassword1" class="form-label fw-semibold mb-0">Account Password</label>
+                    <div class="input-group align-items-center">
+                      <input type="password" name="pwd" class="form-label fs-3 form-control" placeholder="Login Password" required id="exampleInputPassword1">
+                      <button title="" type="button" class="btn btn-outline-primary mb-2" id="togglePassword">
                         <i class="fa fa-eye"></i>
                       </button>
                     </div>

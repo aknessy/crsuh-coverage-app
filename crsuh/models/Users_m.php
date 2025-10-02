@@ -11,21 +11,32 @@ defined('BASEPATH') OR die('No direct script access allowed!');
 class Users_m extends CI_Model
 {
 	
-	public function staff_list(){
-		return $this->db->get_where('users', array("deleted" => 0))->result();
+	public function myhash($string) {
+		return hash("sha512", $string . config_item("encryption_key"));
 	}
-	
-	public function add_staff($array){
-		return $this->db->insert('users', $array);
-	}
-	
-	public function delete_staff($userID, $array){
-		$this->db->where('id', $userID);
-		$this->db->update('users', $array);
-	}
-	
-	public function get_single_staff($staffID){
-		return $this->db->get_where('users', array("active" => 1))->row();
+
+	public function login($credentials){
+		$query = $this->db->get_where('users', $credentials)->row();
+		$data = NULL;
+
+		if($iquery){
+			$data = [
+				'uuid' => $query->user_uuid,
+				'firstname' => $query->firstname,
+				'lastname' => $query->lastname,
+				'phone' => $query->phone,
+				'email' => $query->email,
+				'username' => $query->username,
+				'profile_photo' => $query->profile_image,
+				'status' => $query->status,
+				'role' => $query->role,
+				'logged_in' => TRUE
+			];
+
+			return (object)$data;
+		}
+
+		return false;
 	}
 	
 	
