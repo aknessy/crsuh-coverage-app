@@ -19,7 +19,7 @@ class Users_m extends CI_Model
 		$query = $this->db->get_where('users', $credentials)->row();
 		$data = NULL;
 
-		if($iquery){
+		if($query){
 			$data = [
 				'uuid' => $query->user_uuid,
 				'firstname' => $query->firstname,
@@ -30,6 +30,7 @@ class Users_m extends CI_Model
 				'profile_photo' => $query->profile_image,
 				'status' => $query->status,
 				'role' => $query->role,
+				'usertype' => $query->usertype,
 				'logged_in' => TRUE
 			];
 
@@ -37,6 +38,11 @@ class Users_m extends CI_Model
 		}
 
 		return false;
+	}
+
+	public function create_user($user_data){
+		$this->db->insert('users', $user_data);
+		return $this->db->insert_id();
 	}
 	
 	

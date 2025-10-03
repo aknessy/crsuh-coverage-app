@@ -53,7 +53,7 @@
                                         <div class="alert alert-warning" role="alert">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span class="fs-4"><small>It appears this Ministry/Department does not have any <strong><em>Key Performance Indexe(s)</em></strong> associated with it. Click the "Add KPI" button to create KPIs.</small></span>
-                                                <button class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addKpiModal">Add KPI</button>
+                                                <button type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addKpiModal">Add KPI</button>
                                             </div>
                                         </div>
                                 <?php endif;?>

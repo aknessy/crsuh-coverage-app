@@ -13,7 +13,7 @@ class Md extends CI_Controller{
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array('md_m'));
+		$this->load->model(array('md_m', 'md_login_m'));
 		$this->load->helper('uuid_generator');
 		$this->load->helper('random_md_code');
 	}
@@ -265,6 +265,64 @@ class Md extends CI_Controller{
         }else{
             $this->session->set_flashdata('error', 'Request is invalid!');
             redirect(base_url('md/track_record'));
+        }
+    }
+
+    public function view($uuid){
+        if($_POST){
+            $this->form_validation->set_rules('md_name', 'MD Name', 'trim|required');
+            $this->form_validation->set_rules('md_code', 'MD Code', 'trim|required');
+            $this->form_validation->set_rules('md_state', 'MD State', 'trim');
+            $this->form_validation->set_rules('md_lga', 'MD LGA', 'trim');
+            $this->form_validation->set_rules('md_password', 'MD Password', 'trim|required');
+            
+            if($this->form_validation->run() == false){
+                echo validation_errors();
+                $this->session->set_flashdata('error', 'Form validation was not successful! Please try again!!');
+                redirect(base_url('md/view/'.$uuid));
+            }else{
+                $data = $_POST;
+                
+                $data['pwd_text'] = $data['md_password'];
+                $data['pwd_hash'] = $this->md_login_m->myhash($data['md_password']);
+                $data['updated_at'] = date('Y-m-d H:i:s');
+                
+                unset($data['md_password']);
+                
+                $update = $this->md_m->update($uuid, $data);
+
+                if($update){
+                    $this->session->set_flashdata('success', 'MD updated successfully!');
+                    redirect(base_url('md/view/'.$uuid));
+                }else{
+                    $this->session->set_flashdata('error', 'Failed to update MD!');
+                    redirect(base_url('md/view/'.$uuid));
+                }
+            }
+        }else{
+            $this->data['title'] = 'MD View';
+            $this->data['subview'] = 'dashboard/md_view';
+            $this->data['md'] = $this->md_m->get_md_by_uuid($uuid);
+            $this->data['states'] = $this->md_m->get_md_states();
+            $this->data['lgas'] = $this->md_m->get_md_lgas($this->data['md']->md_state);
+            $this->load->view('_layout_main_', $this->data);
+        }
+    }
+
+    public function delete($md_uuid){
+        if($this->session->login->usertype == 'Super Admin'){
+            $delete = $this->md_m->soft_delete($md_uuid);
+
+            if($delete){
+                $this->session->set_flashdata('success', 'MD deleted successfully!');
+                redirect(base_url('dashboard'));
+            }else{
+                $this->session->set_flashdata('error', 'Failed to delete MD!');
+                redirect(base_url('dashboard'));
+            }
+        }else{
+            $this->session->set_flashdata('error', 'You are not authorized to delete an MD!');
+            redirect(base_url('dashboard'));
         }
     }
 

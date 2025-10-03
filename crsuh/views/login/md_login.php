@@ -14,21 +14,15 @@
             <div class="col-sm-8 col-md-6 col-xl-9">
               <h2 class="mb-3 fs-7 fw-bolder">Welcome to Cross River State Universal Health Monitor Coverage</h2>
               <p class=" mb-9">Cross River State Universal Healthcare Reporting</p>
-              <form method="post">
-                <?php  if ($this->session->flashdata('error')){ ?>
-                  <!-- <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
-                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-                  <strong>Error - </strong> <?=$this->session->flashdata('error')?>
-                  </div> -->
-                  <?php } ?>
+              <?=form_open('', ['class' => 'w-100'])?>
                   <div class="mb-3">
-                    <label for="exampleInputEmail1" class="fw-semibold mb-0">Account Identifier</label>
-                    <input type="text" name="handle" class="form-label fs-3 form-control" placeholder="MD Code or MD Name or Username or Email" required>
+                    <label for="handle" class="fw-semibold mb-0">Account Identifier</label>
+                    <input id="handle" type="text" name="handle" class="form-label fs-3 form-control" placeholder="MD Code or MD Name or Username or Email" autocomplete="off" required>
                   </div>
                   <div class="mb-4">
-                    <label for="exampleInputPassword1" class="form-label fw-semibold mb-0">Account Password</label>
+                    <label for="pwd" class="form-label fw-semibold mb-0">Account Password</label>
                     <div class="input-group align-items-center">
-                      <input type="password" name="pwd" class="form-label fs-3 form-control" placeholder="Login Password" required id="exampleInputPassword1">
+                      <input type="password" name="password" class="form-label fs-3 form-control" placeholder="Login Password" autocomplete="off" required id="pwd">
                       <button title="" type="button" class="btn btn-outline-primary mb-2" id="togglePassword">
                         <i class="fa fa-eye"></i>
                       </button>
@@ -51,7 +45,7 @@
                     <p class="fs-4 mb-0 fw-medium">Powered By </p>
                     <a class="text-primary fw-medium ms-2" href="https://www.nugitech.com">Nugitech</a>
                   </div>
-                </form>
+                <?=form_close() ?>
             </div>
           </div>
         </div>
@@ -66,7 +60,7 @@
 <script>
   $(document).ready(function() {
     $("#togglePassword").click(function() {
-      let passwordField = $("#exampleInputPassword1");
+      let passwordField = $("#pwd");
       let type = passwordField.attr("type") === "password" ? "text" : "password";
       passwordField.attr("type", type);
 

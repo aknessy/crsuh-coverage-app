@@ -38,14 +38,14 @@ class Md_login extends CI_Controller{
 				$this->data['subview'] = 'login/md_login';
 				$this->load->view('layout/_auth_layout', $this->data);
 			}else{
-				$pwd = $this->input->post('pwd');
+				$pwd = $this->input->post('password');
 
 				$credentials1 = [
 					'md_code' => $this->input->post('handle'),
 					'pwd_hash' => $this->md_login_m->myhash($pwd)
 				];
 				
-				$login1 = $this->md_login_m->login($credentials);
+				$login1 = $this->md_login_m->login($credentials1);
 
 				$credential2 = [
 					'md_name' => strtoupper($this->input->post('handle')),
