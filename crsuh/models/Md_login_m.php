@@ -34,6 +34,8 @@ class Md_login_m extends CI_Model
 				'md_code' => $is_logged_in->md_code,
 				'uuid' => $is_logged_in->md_uuid,
 				'md_state' => $is_logged_in->md_state,
+				'usertype' => 'user',
+				'role' => 'MD User',
 				'logged_in' => TRUE
 			];
 

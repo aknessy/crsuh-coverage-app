@@ -40,4 +40,39 @@ class Md_m extends CI_Model
         return $this->db->get_where('lga', ['state_id' => $md_state])->result();
     }
 
+    public function get_md_states(){
+        return $this->db->get('state')->result();
+    }
+
+    public function get_lgas_by_state_id($state_id){
+        return $this->db->get_where('lga', ['state_id' => $state_id])->result();
+    }
+
+    public function get_md_by_uuid($uuid){
+        return $this->db->get_where('crsuh_mds', ['md_uuid' => $uuid])->row();
+    }
+
+    public function insert($data){
+        $this->db->insert('crsuh_track_record', $data);
+        return $this->db->insert_id() > 0;
+    }
+
+    public function create_patient_record($patient_records){
+        $this->db->insert('crsuh_patient_info', $patient_records);
+        return $this->db->last_query();
+    }
+
+    public function update($uuid, $data){
+        $this->db->where('md_uuid', $uuid);
+        $this->db->update('crsuh_mds', $data);
+        // var_dump($this->db->last_query());die;
+        return $this->db->affected_rows() == 1;
+    }
+
+    public function soft_delete($uuid){
+        $this->db->where('md_uuid', $uuid);
+        $this->db->update('crsuh_mds', ['deleted' => 1, 'deleted_at' => date('Y-m-d H:i:s')]);
+        return $this->db->affected_rows() == 1;
+    }
+
 }

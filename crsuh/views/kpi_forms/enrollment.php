@@ -1,7 +1,7 @@
 <div class="col-sm-12">
     <div class="mb-3">
         <label class="form-label fw-semibold mb-0">Sector</label>
-        <select id="sector" class="form-select" name="sector">
+        <select id="sector" class="form-select" name="sector" required>
             <option value="">Select Sector</option>
             <option value="Formal">Formal Sector</option>
             <option value="Informal">Informal Sector</option>
@@ -49,7 +49,7 @@
     </div>
     <div class="row">
         <div class="col-sm-12 d-flex align-items-center justify-content-end">
-            <button id="continueBtn" type="button" class="btn btn-lg btn-outline-primary" disabled>Continue</button>
+            <button id="continueBtn" type="button" class="btn btn-lg btn-outline-primary">Continue</button>
         </div>
     </div>
 </div>
@@ -78,31 +78,12 @@
             
             if(employerLevel !== undefined){
                 $(employerLevel).removeClass('d-none');
-                $('#continueBtn').attr('disabled', false);
+                
             }else{
                 $('#employerLevel').addClass('d-none')
-                $('#continueBtn').attr('disabled', true);
+                
             }
         });
 
-        $('#Informal').on('change', function(){
-            var selectedInformalSector = $(this).val();
-
-            if(selectedInformalSector !== ''){
-                $('#continueBtn').attr('disabled', false)
-            }else{
-                $('#continueBtn').attr('disabled', true)
-            }
-        });
-
-        $('#Vulnerable').on('change', function(){
-            var selectedVulnerableSector = $(this).val()
-
-            if(selectedVulnerableSector !== ''){
-                $('#continueBtn').attr('disabled', false);
-            }else{
-                $('#continueBtn').attr('disabled', true);
-            }
-        })
     });
 </script>

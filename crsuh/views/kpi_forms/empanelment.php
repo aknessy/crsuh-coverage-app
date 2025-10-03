@@ -23,7 +23,7 @@
     <div id="employerLevel" class="row mb-3 d-none">
         <div class="col-sm-12">
             <label class="form-label fw-semibold mb-0">Employer Level</label>
-            <select name="employer_level" class="form-select">
+            <select name="employer_level" class="form-select" required>
                 <option value="State Government">State Government</option>
                 <option value="Local Government">Local Government</option>
             </select>
@@ -31,7 +31,7 @@
     </div>
     <div class="row">
         <div class="col-sm-12 d-flex align-items-center justify-content-end">
-            <button id="continueBtn" type="button" class="btn btn-lg btn-outline-primary" disabled>Continue</button>
+            <button id="continueBtn" type="button" class="btn btn-lg btn-outline-primary">Continue</button>
         </div>
     </div>
 </div>
@@ -53,25 +53,6 @@
                 $('#employerLevel').addClass('d-none')
             }
         });
-
-        $('#Informal').on('change', function(){
-            var selectedInformalSector = $(this).val();
-
-            if(selectedInformalSector !== ''){
-                $('#continueBtn').attr('disabled', false)
-            }else{
-                $('#continueBtn').attr('disabled', true)
-            }
-        });
-
-        $('#Vulnerable').on('change', function(){
-            var selectedVulnerableSector = $(this).val()
-
-            if(selectedVulnerableSector !== ''){
-                $('#continueBtn').attr('disabled', false);
-            }else{
-                $('#continueBtn').attr('disabled', true);
-            }
-        })
+        
     });
 </script>

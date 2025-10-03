@@ -10,7 +10,7 @@ class Md_login extends CI_Controller{
 
 	function __construct(){
 		parent::__construct();
-		$this->load->model(array('md_login_m','md_m'));
+		$this->load->model(array('md_login_m','md_m','users_m'));
 		$this->load->helper('uuid_generator');
 		$this->load->helper('random_md_code');
 	}
@@ -18,11 +18,11 @@ class Md_login extends CI_Controller{
 	private function rules(){
 		$rules = array(
 			array(
-				'field' => 'md_code',
+				'field' => 'handle',
 				'rules' => 'trim|required'
 			),
 			array(
-				'field' => 'md_pwd',
+				'field' => 'pwd',
 				'rule' => 'trim|required'
 			)
 		);
@@ -38,20 +38,51 @@ class Md_login extends CI_Controller{
 				$this->data['subview'] = 'login/md_login';
 				$this->load->view('layout/_auth_layout', $this->data);
 			}else{
-				$md_pwd = $this->input->post('md_pwd');
+				$pwd = $this->input->post('password');
 
-				$credentials = [
-					'md_code' => $this->input->post('md_code'),
-					'pwd_hash' => $this->md_login_m->myhash($md_pwd)
+				$credentials1 = [
+					'md_code' => $this->input->post('handle'),
+					'pwd_hash' => $this->md_login_m->myhash($pwd)
 				];
 				
-				$login = $this->md_login_m->login($credentials);
+				$login1 = $this->md_login_m->login($credentials1);
 
-				if($login){
-					$this->session->set_userdata('login', $login);
+				$credential2 = [
+					'md_name' => strtoupper($this->input->post('handle')),
+					'pwd_hash' => $this->md_login_m->myhash($pwd)
+				];
+
+				$login2 = $this->md_login_m->login($credential2);
+
+				$credential3 = [
+					'email' => $this->input->post('handle'),
+					'password' => $this->users_m->myhash($pwd)
+				];
+
+				$login3 = $this->users_m->login($credential3);
+
+				$credentials4 = [
+					'username' => $this->input->post('handle'),
+					'password' => $this->users_m->myhash($pwd)
+				];
+
+				$login4 = $this->users_m->login($credentials4);
+
+				if($login1){
+					$this->session->set_userdata('login', $login1);
 					redirect(base_url('md'));
-				}else{
-					$this->session->set_flashdata('error', 'Invalid Login Details');
+				}elseif($login2){
+					$this->session->set_userdata('login', $login2);
+					redirect(base_url('md'));
+				}elseif($login3){
+					$this->session->set_userdata('login', $login3);
+					redirect(base_url('dashboard'));
+				}elseif($login4){
+					$this->session->set_userdata('login', $login4);
+					redirect(base_url('dashboard'));
+				}
+				else{
+					$this->session->set_flashdata('error', 'Login Credentails are Invalid!');
 					redirect('md_login');
 				}
 			}
